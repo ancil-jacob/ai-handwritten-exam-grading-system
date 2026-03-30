@@ -1,54 +1,116 @@
-# AI-Powered Handwritten Exam Grading System
+# GradeAI
 
-## Overview
-This project is an intelligent system designed to automate the evaluation of handwritten exam answer sheets using Optical Character Recognition (OCR) and Natural Language Processing (NLP).
-
-The system extracts handwritten text, analyzes semantic meaning, and assigns marks based on similarity with model answers. It also provides feedback to improve student learning.
+**Open-source AI-based subjective answer evaluation.** Runs locally: evaluate typed or handwritten student answers using semantic similarity, concept coverage, and optional grammar scoring. No paid APIs.
 
 ---
 
-## Features
+## Prerequisites
 
-- Handwritten answer evaluation
-- OCR-based text extraction (PaddleOCR)
-- NLP-based semantic analysis
-- Automated scoring system
-- Feedback generation
-- Teacher review system
-- Secure authentication
+- **Python 3.10+** — [python.org](https://www.python.org/downloads/)
+- **Node.js 18+** and **npm** — [nodejs.org](https://nodejs.org/)
 
 ---
 
-## Tech Stack
+## Quick start (new machine)
 
-### Backend
-- Python
-- FastAPI
+**1. Open project folder**
+```bash
+cd grade
+```
 
-### Frontend
-- React (TypeScript)
-- HTML, CSS, JavaScript
+**2. Create and activate virtual environment**
 
-### AI Components
-- PaddleOCR
-- Sentence Transformers
-- NLTK
+Windows:
+```cmd
+python -m venv .venv
+.venv\Scripts\activate
+```
+Linux/macOS:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-### Database
-- SQLite
+**3. Install dependencies**
+```bash
+pip install -r requirements.txt
+pip install -e .
+```
+
+**4. Seed data (once)**
+```bash
+python scripts/seed_dev.py
+```
+Creates admin user `admin@gradeai.local` / `admin123`, Physics subject, and a sample exam.
+
+**5. Run**
+```bash
+python run_all.py
+```
+- **Frontend:** http://localhost:5173  
+- **Backend API:** http://localhost:8000  
+- **API docs:** http://localhost:8000/docs  
+
+Log in with `admin@gradeai.local` / `admin123`.
 
 ---
 
-## System Workflow
+## Run options
 
-1. User uploads handwritten answer sheet
-2. OCR extracts text
-3. NLP processes the text
-4. System compares with model answers
-5. Marks are assigned
-6. Feedback is generated
-7. Results are stored and displayed
+| Action        | Command / URL |
+|---------------|----------------|
+| Start all     | `python run_all.py` or double-click `run-all.bat` (Windows) |
+| Backend only  | `python main.py` or `run.bat` |
+| Frontend only | `cd frontend` → `npm install` → `npm run dev` |
 
 ---
 
+## Project structure
 
+```
+grade/
+├── gradeai/          # Backend (FastAPI, SQLAlchemy, embeddings, OCR)
+├── frontend/         # React + TypeScript + Vite + Tailwind
+├── scripts/          # seed_dev.py
+├── tests/
+├── alembic/          # DB migrations
+├── main.py           # Backend entry
+├── run_all.py        # Start backend + frontend
+├── requirements.txt # Python dependencies
+└── pyproject.toml
+```
+
+---
+
+## Configuration
+
+- Copy `.env.example` to `.env` to override settings (debug, log level, database, etc.).
+- **Optional:** OCR for handwritten answers: `pip install paddlepaddle paddleocr`
+- **Optional:** Grammar scoring: included in `requirements.txt` (LanguageTool).
+
+First evaluation downloads the embedding model (~400MB) once.
+
+---
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| `No module named 'gradeai'` | From project root: `pip install -e .` |
+| Subject dropdown empty | Run `python scripts/seed_dev.py` |
+| "Cannot reach backend" | Start backend: `python main.py` or `python run_all.py` |
+| Frontend won’t start | In `frontend`: `npm install` then `npm run dev` |
+
+---
+
+## Tests
+
+```bash
+pytest
+```
+
+---
+
+## License & credits
+
+Open-source. No paid APIs; runs fully locally.
